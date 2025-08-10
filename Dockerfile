@@ -2,7 +2,17 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
+# Install Gradle CLI to generate wrapper
+RUN apt-get update && apt-get install -y wget unzip && \
+    wget https://services.gradle.org/distributions/gradle-8.7-bin.zip && \
+    unzip gradle-8.7-bin.zip -d /opt && \
+    ln -s /opt/gradle-8.7/bin/gradle /usr/bin/gradle && \
+    rm gradle-8.7-bin.zip
+
+
 COPY ./app/ ./
+
+RUN gradle wrapper
 
 RUN chmod +x ./gradlew
 
